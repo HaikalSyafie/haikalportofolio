@@ -55,9 +55,47 @@
 
 /* ---------- Base Styles ---------- */
 body {
+  position: relative;
   background: var(--background);
   color: var(--foreground);
   font-family: var(--font-sans, "Inter", system-ui, -apple-system, sans-serif);
+}
+
+/* Fixed, decorative retro backdrop — cool blue/violet corner glows, a faint
+   blueprint grid + accent dot-grid, and hairline scanlines on top. Stays
+   behind all content (z-index: -1) and never intercepts clicks. */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background-image:
+    radial-gradient(ellipse 60% 45% at 12% 8%, rgba(59, 130, 246, 0.16), transparent 60%),
+    radial-gradient(ellipse 55% 45% at 88% 92%, rgba(168, 85, 247, 0.14), transparent 60%),
+    linear-gradient(rgba(255, 255, 255, 0.035) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.035) 1px, transparent 1px),
+    radial-gradient(circle, rgba(124, 140, 245, 0.2) 1px, transparent 1.5px),
+    repeating-linear-gradient(
+      to bottom,
+      rgba(255, 255, 255, 0.035) 0px,
+      rgba(255, 255, 255, 0.035) 1px,
+      transparent 1px,
+      transparent 3px
+    );
+  background-size:
+    100% 100%,
+    100% 100%,
+    88px 88px,
+    88px 88px,
+    26px 26px,
+    100% 3px;
+}
+
+@media (prefers-reduced-transparency: reduce) {
+  body::before {
+    display: none;
+  }
 }
 
 /* ---------- Typographic hierarchy ---------- */
@@ -202,14 +240,20 @@ html {
 /* ---------- Section spacing ---------- */
 /* Fluid container: fills the viewport on typical laptop/desktop widths,
    only capping (with generous padding) on very wide monitors so line
-   lengths stay reasonable. */
-.section-container {
-  width: 100%;
-  max-width: 96rem;
-  margin-left: auto;
-  margin-right: auto;
-  padding-left: 1.5rem;
-  padding-right: 1.5rem;
+   lengths stay reasonable. Wrapped in @layer components so a Tailwind
+   max-w-* utility applied alongside .section-container can still win —
+   unlayered CSS always beats layered utilities regardless of source
+   order or specificity, which silently defeated every max-w-* override
+   on this class before this fix. */
+@layer components {
+  .section-container {
+    width: 100%;
+    max-width: 96rem;
+    margin-left: auto;
+    margin-right: auto;
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+  }
 }
 
 @keyframes scroll-down {
@@ -230,24 +274,26 @@ html {
   animation: scroll-down 1.6s ease-in-out infinite;
 }
 
-@media (min-width: 640px) {
-  .section-container {
-    padding-left: 2rem;
-    padding-right: 2rem;
+@layer components {
+  @media (min-width: 640px) {
+    .section-container {
+      padding-left: 2rem;
+      padding-right: 2rem;
+    }
   }
-}
 
-@media (min-width: 1024px) {
-  .section-container {
-    padding-left: 3rem;
-    padding-right: 3rem;
+  @media (min-width: 1024px) {
+    .section-container {
+      padding-left: 3rem;
+      padding-right: 3rem;
+    }
   }
-}
 
-@media (min-width: 1536px) {
-  .section-container {
-    padding-left: 4rem;
-    padding-right: 4rem;
+  @media (min-width: 1536px) {
+    .section-container {
+      padding-left: 4rem;
+      padding-right: 4rem;
+    }
   }
 }
 
@@ -311,31 +357,6 @@ button:focus-visible {
   outline: 2px solid var(--color-accent);
   outline-offset: 2px;
   border-radius: 2px;
-}
-
-/* ---------- Hero background chart ---------- */
-.hero-chart {
-  opacity: 0.055;
-}
-
-.hero-chart-track {
-  animation: hero-chart-scroll 70s linear infinite;
-}
-
-@keyframes hero-chart-scroll {
-  from {
-    transform: translateX(0);
-  }
-
-  to {
-    transform: translateX(-100vw);
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .hero-chart-track {
-    animation: none;
-  }
 }
 
 /* ---------- Hero scroll cue ---------- */

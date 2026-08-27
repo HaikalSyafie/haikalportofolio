@@ -1,6 +1,5 @@
 import Reveal from "@/components/ui/Reveal";
 import TypingRole from "@/components/ui/TypingRole";
-import HeroChartBackground from "@/components/home/HeroChartBackground";
 
 export default function Hero() {
   return (
@@ -8,9 +7,6 @@ export default function Hero() {
       id="hero"
       className="relative flex min-h-[100svh] flex-col items-center justify-center overflow-hidden px-4 pt-24 pb-20 sm:px-6 lg:px-8"
     >
-      {/* Background */}
-      <HeroChartBackground />
-
       {/* Main Content */}
       <div className="section-container relative z-10 w-full">
         <div className="mx-auto flex max-w-4xl flex-col items-center text-center">

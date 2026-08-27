@@ -142,7 +142,9 @@ export default function Navbar() {
 
           {/* Download CV */}
           <a
-            href="#"
+            href="https://drive.google.com/file/d/1R7sNZI7fmUP7AWSJ3rxBqeFkXO98xAf2/view?usp=sharing"
+            target="_blank"
+            rel="noopener noreferrer"
             className="
               text-base
               font-medium
@@ -248,7 +250,9 @@ export default function Navbar() {
 
           {/* Mobile Download CV */}
           <a
-            href="#"
+            href="https://drive.google.com/file/d/1R7sNZI7fmUP7AWSJ3rxBqeFkXO98xAf2/view?usp=sharing"
+            target="_blank"
+            rel="noopener noreferrer"
             onClick={() => setMobileOpen(false)}
             className="
               mt-2

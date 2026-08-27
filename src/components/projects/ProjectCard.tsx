@@ -13,41 +13,43 @@ export default function ProjectCard({ project }: ProjectCardProps) {
       className="card card-hover group flex flex-col overflow-hidden h-full"
     >
       {/* Thumbnail */}
-      <div className="relative aspect-[16/10] overflow-hidden border-b border-border">
-        {project.thumbnail ? (
-          // eslint-disable-next-line @next/next/no-img-element
-          <img
-            src={project.thumbnail}
-            alt={project.title}
-            className="w-full h-full object-cover transition-transform duration-500 ease-out group-hover:scale-[1.04]"
-          />
-        ) : (
-          <div className="w-full h-full flex items-center justify-center bg-surface">
-            <div className="flex flex-col items-center gap-2 text-subtle">
-              <svg
-                className="w-7 h-7 opacity-40"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-                strokeWidth={1}
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  d="M2.25 15.75l5.159-5.159a2.25 2.25 0 013.182 0l5.159 5.159m-1.5-1.5l1.409-1.409a2.25 2.25 0 013.182 0l2.909 2.909M3.75 21h16.5A2.25 2.25 0 0022.5 18.75V5.25A2.25 2.25 0 0020.25 3H3.75A2.25 2.25 0 001.5 5.25v13.5A2.25 2.25 0 003.75 21z"
-                />
-              </svg>
-              <span className="text-[11px] font-mono opacity-70">
-                Project Thumbnail
-              </span>
+      <div className="p-3 border-b border-border">
+        <div className="relative aspect-[2/1] overflow-hidden rounded-md">
+          {project.thumbnail ? (
+            // eslint-disable-next-line @next/next/no-img-element
+            <img
+              src={project.thumbnail}
+              alt={project.title}
+              className="w-full h-full object-cover transition-transform duration-500 ease-out group-hover:scale-[1.04]"
+            />
+          ) : (
+            <div className="w-full h-full flex items-center justify-center bg-surface">
+              <div className="flex flex-col items-center gap-2 text-subtle">
+                <svg
+                  className="w-7 h-7 opacity-40"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                  strokeWidth={1}
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M2.25 15.75l5.159-5.159a2.25 2.25 0 013.182 0l5.159 5.159m-1.5-1.5l1.409-1.409a2.25 2.25 0 013.182 0l2.909 2.909M3.75 21h16.5A2.25 2.25 0 0022.5 18.75V5.25A2.25 2.25 0 0020.25 3H3.75A2.25 2.25 0 001.5 5.25v13.5A2.25 2.25 0 003.75 21z"
+                  />
+                </svg>
+                <span className="text-[11px] font-mono opacity-70">
+                  Project Thumbnail
+                </span>
+              </div>
             </div>
-          </div>
-        )}
+          )}
+        </div>
       </div>
 
       {/* Title + category + description */}
       <div className="px-4 pt-3.5 flex-1 flex flex-col gap-1.5">
-        <span className="text-[11px] font-medium uppercase tracking-wide text-accent">
+        <span className="text-[11px] font-medium uppercase tracking-wide text-accent line-clamp-1">
           {project.category}
         </span>
         <h3 className="text-base font-semibold text-foreground leading-snug line-clamp-1">

@@ -14,7 +14,7 @@ const experience = [
 export default function Experience() {
   return (
     <section id="experience" className="section-padding scroll-mt-20">
-      <div className="section-container max-w-3xl">
+      <div className="section-container max-w-3xl mr-auto ml-0">
         <Reveal>
           <SectionHeading
             kicker="Career"

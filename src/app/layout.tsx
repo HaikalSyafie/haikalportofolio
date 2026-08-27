@@ -22,9 +22,9 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "[PLACEHOLDER Your Name] — Data Science Portfolio",
+  title: "Haikal Syafie — Data Science Portfolio",
   description:
-    "[PLACEHOLDER] — A professional data science portfolio showcasing end-to-end machine learning projects, from data exploration to model deployment.",
+    "Haikal Syafie — A professional data science portfolio showcasing end-to-end machine learning projects, from data exploration to model deployment.",
   keywords: [
     "data science",
     "machine learning",

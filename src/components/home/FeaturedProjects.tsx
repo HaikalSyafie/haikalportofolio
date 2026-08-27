@@ -13,7 +13,6 @@ export default function FeaturedProjects() {
           <SectionHeading
             kicker="Portfolio"
             title="Featured Projects"
-            description="End-to-end data science projects showcasing problem-solving, technical depth, and real-world impact."
           />
         </Reveal>
         <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-5">

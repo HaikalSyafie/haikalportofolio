@@ -2,7 +2,7 @@
 
 import { useEffect, useState, useSyncExternalStore } from "react";
 
-const roles = ["Data Scientist", "Machine Learning Engineer", "Software Developer"];
+const roles = ["Data Scientist", "Data Analyst", "Machine Learning Engineer"];
 
 const TYPE_SPEED = 65;
 const DELETE_SPEED = 35;

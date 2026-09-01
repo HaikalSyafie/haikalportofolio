@@ -1,6 +1,7 @@
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import { projects, getProjectById, getAdjacentProjects } from "@/data/projects";
+import type { CaseStudyTable } from "@/data/projects";
 import type { Metadata } from "next";
 import Reveal from "@/components/ui/Reveal";
 import SectionHeading from "@/components/ui/SectionHeading";
@@ -56,6 +57,56 @@ function ImagePlaceholder({ src, label, caption }: { src?: string; label: string
         </div>
       )}
       <p className="text-xs text-subtle mt-2 italic">{caption}</p>
+    </div>
+  );
+}
+
+// Data table for the "pipeline" case-study layout — column 0 is the row header,
+// remaining columns are right-aligned figures; an optional row can be highlighted.
+function CaseStudyTableView({ table }: { table: CaseStudyTable }) {
+  return (
+    <div className="my-6">
+      <div className="overflow-x-auto rounded-lg border border-border">
+        <table className="w-full text-sm">
+          <thead>
+            <tr className="border-b border-border text-left text-subtle">
+              {table.columns.map((c, i) => (
+                <th
+                  key={c}
+                  className={`px-4 py-3 font-medium whitespace-nowrap ${i === 0 ? "" : "text-right"}`}
+                >
+                  {c}
+                </th>
+              ))}
+            </tr>
+          </thead>
+          <tbody>
+            {table.rows.map((row, ri) => {
+              const highlight = table.highlightRowIndex === ri;
+              return (
+                <tr
+                  key={ri}
+                  className="border-b border-border last:border-0"
+                  style={highlight ? { background: "rgba(124,140,245,0.08)" } : undefined}
+                >
+                  {row.map((cell, ci) => (
+                    <td
+                      key={ci}
+                      className={`px-4 py-3 whitespace-nowrap ${
+                        ci === 0 ? "font-medium text-foreground" : "text-muted text-right"
+                      }`}
+                      style={ci === 0 && highlight ? { color: ACCENT } : undefined}
+                    >
+                      {cell}
+                    </td>
+                  ))}
+                </tr>
+              );
+            })}
+          </tbody>
+        </table>
+      </div>
+      {table.caption && <p className="text-xs text-subtle mt-2 italic">{table.caption}</p>}
     </div>
   );
 }
@@ -175,7 +226,155 @@ export default async function ProjectPage({
           <p className="text-foreground-muted leading-relaxed">{project.overview}</p>
         </Reveal>
 
-        {project.layout === "docs" ? (
+        {project.layout === "pipeline" ? (
+          <>
+            {/* ============================================================ */}
+            {/* PIPELINE — ROLE */}
+            {/* ============================================================ */}
+            {project.role && (
+              <Reveal as="div" className="py-8 border-t border-border">
+                <SectionHeading kicker="Role" title="My Role" align="left" tight />
+                <p className="text-foreground-muted leading-relaxed">{project.role}</p>
+              </Reveal>
+            )}
+
+            {/* ============================================================ */}
+            {/* PIPELINE — PROBLEM */}
+            {/* ============================================================ */}
+            {project.problem && (
+              <Reveal as="div" className="py-8 border-t border-border">
+                <SectionHeading kicker="Problem" title="The Challenge" align="left" tight />
+                <p className="text-foreground-muted leading-relaxed">{project.problem}</p>
+              </Reveal>
+            )}
+
+            {/* ============================================================ */}
+            {/* PIPELINE — KEY NUMBERS */}
+            {/* ============================================================ */}
+            {primaryMetric && (
+              <Reveal as="div" className="py-8 border-t border-border">
+                <SectionHeading kicker="At a Glance" title="Key Numbers" align="left" tight />
+                <div
+                  className="mb-6 rounded-lg border px-5 py-4"
+                  style={{ borderColor: "rgba(124,140,245,0.35)", background: "rgba(124,140,245,0.08)" }}
+                >
+                  <div className="text-3xl sm:text-4xl font-semibold" style={{ color: ACCENT }}>
+                    {primaryMetric.value}
+                  </div>
+                  <div className="text-sm text-foreground font-medium mt-1">{primaryMetric.label}</div>
+                  {primaryMetric.description && (
+                    <div className="text-xs text-subtle mt-0.5">{primaryMetric.description}</div>
+                  )}
+                </div>
+                {otherMetrics.length > 0 && (
+                  <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+                    {otherMetrics.map((metric, i) => (
+                      <div key={`${metric.label}-${i}`} className="min-w-0">
+                        <div className="text-xl font-semibold text-foreground break-words">{metric.value}</div>
+                        <div className="text-xs text-muted mt-1 font-medium">{metric.label}</div>
+                        {metric.description && (
+                          <div className="text-xs text-subtle mt-0.5">{metric.description}</div>
+                        )}
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </Reveal>
+            )}
+
+            {/* ============================================================ */}
+            {/* PIPELINE — STAGE STRIP */}
+            {/* ============================================================ */}
+            {project.pipelineStages && project.pipelineStages.length > 0 && (
+              <Reveal as="div" className="py-8 border-t border-border">
+                <SectionHeading kicker="Approach" title="The Pipeline" align="left" tight />
+                <div
+                  className={`grid gap-3 ${
+                    project.pipelineStages.length === 4
+                      ? "sm:grid-cols-2 lg:grid-cols-4"
+                      : "sm:grid-cols-3"
+                  }`}
+                >
+                  {project.pipelineStages.map((stage, i) => (
+                    <div key={i} className="rounded-lg border border-border bg-surface p-4">
+                      <div className="text-xs font-mono font-semibold" style={{ color: ACCENT }}>
+                        {stage.label}
+                      </div>
+                      <div className="mt-1 text-sm font-semibold text-foreground">{stage.title}</div>
+                      <div className="mt-1.5 text-xs text-muted leading-relaxed">{stage.detail}</div>
+                    </div>
+                  ))}
+                </div>
+              </Reveal>
+            )}
+
+            {/* ============================================================ */}
+            {/* PIPELINE — CASE STUDY SECTIONS */}
+            {/* ============================================================ */}
+            {project.caseStudySections?.map((sec, i) => (
+              <Reveal as="div" key={i} className="py-8 border-t border-border">
+                <SectionHeading kicker={sec.kicker} title={sec.title} align="left" tight />
+                {sec.body && <p className="text-foreground-muted leading-relaxed">{sec.body}</p>}
+                {sec.bullets && sec.bullets.length > 0 && (
+                  <ul className="mt-4 space-y-2.5">
+                    {sec.bullets.map((b, j) => (
+                      <li key={j} className="flex gap-3 text-sm text-foreground-muted leading-relaxed">
+                        <span className="text-subtle">→</span>
+                        <span>{b}</span>
+                      </li>
+                    ))}
+                  </ul>
+                )}
+                {sec.table && <CaseStudyTableView table={sec.table} />}
+                {sec.image && (
+                  <ImagePlaceholder src={sec.image.src} label={sec.image.alt} caption={sec.image.caption} />
+                )}
+              </Reveal>
+            ))}
+
+            {/* ============================================================ */}
+            {/* PIPELINE — KEY FINDINGS */}
+            {/* ============================================================ */}
+            {project.insights && project.insights.length > 0 && (
+              <Reveal as="div" className="py-8 border-t border-border">
+                <SectionHeading kicker="Insights" title="Key Findings" align="left" tight />
+                <ul className="space-y-4">
+                  {project.insights.map((insight, i) => (
+                    <li key={i} className="flex gap-4">
+                      <span
+                        className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full border text-xs font-mono font-semibold mt-0.5"
+                        style={{ borderColor: "rgba(124,140,245,0.5)", color: ACCENT }}
+                      >
+                        {i + 1}
+                      </span>
+                      <span className="text-foreground-muted leading-relaxed">{insight}</span>
+                    </li>
+                  ))}
+                </ul>
+              </Reveal>
+            )}
+
+            {/* ============================================================ */}
+            {/* PIPELINE — LIMITATIONS & NEXT STEPS */}
+            {/* ============================================================ */}
+            {project.limitations && (
+              <Reveal as="div" className="py-8 border-t border-border">
+                <SectionHeading kicker="Honest Assessment" title="Limitations & Next Steps" align="left" tight />
+                <p className="text-foreground-muted leading-relaxed">{project.limitations}</p>
+                {project.nextSteps && project.nextSteps.length > 0 && (
+                  <ul className="mt-5 space-y-2.5">
+                    {project.nextSteps.map((step, i) => (
+                      <li key={i} className="flex gap-3 text-sm text-foreground-muted leading-relaxed">
+                        <span className="text-subtle">→</span>
+                        <span>{step}</span>
+                      </li>
+                    ))}
+                  </ul>
+                )}
+              </Reveal>
+            )}
+          </>
+        ) : project.layout === "docs" ? (
           <>
             {/* ============================================================ */}
             {/* DOCS — ARCHITECTURE */}
